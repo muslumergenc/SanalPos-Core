@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IsBankMvc.Abstraction\IsBankMvc.Abstraction.csproj" />
+    <ProjectReference Include="..\IsBankMvc.DataAccess\IsBankMvc.DataAccess.csproj" />
+    <ProjectReference Include="..\IsBankMvc.Provider.IsBank\IsBankMvc.Provider.IsBank.csproj" />
+  </ItemGroup>
+
+</Project>

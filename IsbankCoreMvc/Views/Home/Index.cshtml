@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using IsBankMvc.Abstraction.Models.Payments
+@model PreparePaymentRequestBase
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<form action="/" method="post">
+    <table>
+        <tr>
+            <td>Kart Sahibinin Adı Soyadı</td>
+            <td><input type="text" name="CardHolderName" asp-for="CardHolderName" value="" /></td>
+        </tr>
+        <tr>
+            <td>Kredi Kartı Numarası</td>
+            <td><input type="text" name="CardNumber" asp-for="CardNumber" value="" size="20" /></td>
+        </tr>
+        <tr>
+            <td>CVV</td>
+            <td><input type="text" name="Cvv" asp-for="Cvv" value="" /></td>
+        </tr>
+
+        <tr>
+            <td>Son Kullanma Yılı</td>
+            <td><input type="text" name="ExpiryDateYear" asp-for="ExpiryDateYear" value="" /></td>
+        </tr>
+
+        <tr>
+            <td>Son Kullanma Ayı</td>
+            <td><input type="text" name="ExpiryDateMonth" asp-for="ExpiryDateMonth" value="" /> </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="Ödemeyi Tamamla" />
+            </td>
+        </tr>
+    </table>
+</form>
+

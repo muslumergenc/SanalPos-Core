@@ -6,7 +6,6 @@ using IsBankMvc.Abstraction.Models.Payments;
 using IsBankMvc.Abstraction.Types;
 using IsBankMvc.DataAccess.Contracts;
 using Microsoft.Extensions.DependencyInjection;
-using System.Globalization;
 
 namespace IsBankMvc.Business.Implementation
 {

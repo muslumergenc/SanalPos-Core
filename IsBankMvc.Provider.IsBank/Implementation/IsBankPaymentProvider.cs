@@ -32,11 +32,11 @@ namespace IsBankMvc.Provider.IsBank.Implementation
             _jsonService = jsonService;
 
             _payUrl = "https://istest.asseco-see.com.tr/fim/est3Dgate";
-            _successUrl = "https://localhost:7258/home/success";
-            _failUrl = "https://localhost:7258/home/error";
-            _storeKey = "TEST3232";
+            _successUrl = "https://localhost/home/success";
+            _failUrl = "https://localhost/home/error";
+            _storeKey = "*********";
             _storeType = "3D_PAY";
-            _clientId = "700657171617";
+            _clientId = "*************";
             _chargeType = "Auth";
             _currencyMap.Add("EUR", "978");
             _currencyMap.Add("GBP", "826");

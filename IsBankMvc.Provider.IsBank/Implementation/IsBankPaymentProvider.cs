@@ -32,7 +32,7 @@ public class IsBankPaymentProvider : IIsBankPaymentProvider
             _failUrl = "https://localhost:7258/is-bank/fail/:paymentId";
             _storeKey = "TEST3232";
             _storeType = "3D_PAY";
-            _clientId = "700657171617";
+            _clientId = "*************";
             _chargeType = "Auth";
             _currencyMap.Add("EUR", "978");
             _currencyMap.Add("GBP", "826");
@@ -306,3 +306,4 @@ public class IsBankPaymentProvider : IIsBankPaymentProvider
         }
         #endregion
     }
+}

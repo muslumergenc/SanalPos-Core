@@ -11,7 +11,7 @@ namespace IsBankMvc.Abstraction.Contracts.Payments
         Task<OperationResult<PreparePaymentResponse>> PreparePayment(PreparePaymentRequest request);
 
         Task<OperationResult<BankCallbackResponse>> BankCallback(Dictionary<string, string> parameters);
-        // BankCallbackParameters ParseParameters(Dictionary<string, string> parameters);
-        // Task<OperationResult<bool>> VerifyPayment(Dictionary<string, string> parameters);
+        BankCallbackParameters ParseParameters(Dictionary<string, string> parameters);
+        Task<OperationResult<bool>> VerifyPayment(Dictionary<string, string> parameters);
     }
 }

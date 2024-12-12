@@ -20,3 +20,108 @@ html {
 body {
   margin-bottom: 60px;
 }
+.credit-card {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    width: 100%;
+    max-width: 400px;
+    height: 220px;
+    padding: 20px;
+    position: relative;
+}
+
+    .credit-card .chip {
+        background: linear-gradient(135deg, #d4af37, #ffdf00);
+        width: 50px;
+        height: 35px;
+        border-radius: 5px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+.credit-card-logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.credit-card-number {
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    margin-top: 60px;
+    white-space: nowrap;
+}
+
+.credit-card-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.credit-card-front,
+.credit-card-back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.credit-card-front {
+    background: linear-gradient(135deg, #6d5dfc, #c93dff);
+}
+
+.credit-card-back {
+    background: linear-gradient(135deg, #333, #444);
+    transform: rotateY(180deg);
+}
+
+.magnetic-strip {
+    background: black;
+    height: 40px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.cvv-section {
+    background: white;
+    border-radius: 5px;
+    color: black;
+    text-align: right;
+    letter-spacing: 2px;
+}
+
+.credit-card-name,
+.credit-card-expiry {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.credit-card-expiry {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.credit-card-name {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}

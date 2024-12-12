@@ -1,0 +1,17 @@
+﻿@model RegisterRequest
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<h1>Register</h1>
+<form asp-action="Register" method="post">
+    <div class="input_box">
+        <input type="email" asp-for="Username" placeholder="Enter email address" required />
+    </div>
+    <div class="input_box">
+        <input type="password" asp-for="Password" placeholder="Enter your password" required />
+    </div>
+    <button type="submit">Kayıt Ol</button>
+</form>
+

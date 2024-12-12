@@ -33,7 +33,7 @@ namespace IsBankMvc.DataAccess
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 });
             });
-
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             return services;
         }

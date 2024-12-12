@@ -1,4 +1,5 @@
 using IsbankCoreMvc.Models;
+using IsbankCoreMvc.Services;
 using IsBankMvc.Abstraction.Interfaces.Payments;
 using IsBankMvc.Abstraction.Models.Payments;
 using IsBankMvc.Abstraction.Types;
@@ -11,37 +12,37 @@ namespace IsbankCoreMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IPaymentService _service;
-        public HomeController(ILogger<HomeController> logger, IPaymentService service)
+        private readonly ITokenService _tokenService;
+        public HomeController(ILogger<HomeController> logger, IPaymentService service, ITokenService tokenService)
         {
             _logger = logger;
             _service = service;
+            _tokenService=tokenService;
         }
-
-        public IActionResult Index()
+        [Route("kredi-karti")]
+        public Task<IActionResult> Index()
         {
-            return View();
+            return Task.FromResult<IActionResult>(View());
         }
         [HttpPost]
+        [Route("kredi-karti")]
         public async Task<IActionResult> Index(PreparePaymentRequestBase obj)
         {
             if (!ModelState.IsValid)
-                return View(OperationResult<PreparePaymentResponse>.Rejected("model validation"));
+                return View();
             obj.RequestIp = GetIP();
             obj.OrderId = Guid.NewGuid();
             obj.Language = "TR";
+            obj.CardNumber=obj.CardNumber.Replace("-", "");
             var result = await _service.PreparePayment(obj);
             if (result.Data is null)
-            {
-                return View(OperationResult<PreparePaymentResponse>.Rejected("Ödeme hazýrlýðý baþarýsýz oldu"));
-            }
+                return View();
             return Content(result.Data.Markup, "text/html");
         }
         public IActionResult Success()
         {
-            // Ödeme baþarýlý olduðunda gösterilecek sayfa
             return View();
         }
-
         protected string GetIP()
         {
             var ip = HttpContext.Request.Headers["CF-Connecting-IP"].ToString();
@@ -52,11 +53,10 @@ namespace IsbankCoreMvc.Controllers
 
             return ip;
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }

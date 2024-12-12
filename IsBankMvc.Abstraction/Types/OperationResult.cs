@@ -18,7 +18,6 @@ namespace IsBankMvc.Abstraction.Types
                 Status = OperationResultStatus.Duplicate
             };
         }
-
         public static OperationResult<T> Failed(string? message = null)
         {
             return new OperationResult<T>
@@ -34,7 +33,6 @@ namespace IsBankMvc.Abstraction.Types
                 Status = OperationResultStatus.NotFound
             };
         }
-
         public static OperationResult<T> Rejected(string? message = null, T? data = default)
         {
             return new OperationResult<T>
@@ -44,7 +42,6 @@ namespace IsBankMvc.Abstraction.Types
                 Data = data
             };
         }
-
         public static OperationResult<T> Success(T? data = default)
         {
             return new OperationResult<T>
@@ -53,7 +50,6 @@ namespace IsBankMvc.Abstraction.Types
                 Status = OperationResultStatus.Success
             };
         }
-
         public static OperationResult<T> UnAuthorized()
         {
             return new OperationResult<T>
@@ -61,7 +57,6 @@ namespace IsBankMvc.Abstraction.Types
                 Status = OperationResultStatus.UnAuthorized
             };
         }
-
         public OperationResult<TX> To<TX>(TX? model = default)
         {
             return new OperationResult<TX>

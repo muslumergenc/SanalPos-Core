@@ -1,43 +1,59 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-@using IsBankMvc.Abstraction.Models.Payments
+﻿@using IsBankMvc.Abstraction.Models.Payments
 @model PreparePaymentRequestBase
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{ViewData["Title"] = "Home Page";}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+           <div class="card shadow">
+                    <div class="card-body">
+                        <div class="credit-card" id="creditCard">
+                            <div class="credit-card-inner">
+                                <div class="credit-card-front">
+                                    <div class="chip"></div>
+                                    <div class="credit-card-number" id="displayCardNumber">#### #### #### ####</div>
+                                    <div class="credit-card-logo" id="cardLogo"></div>
+                                    <div class="credit-card-name" id="displayCardName">Kart Sahibi</div>
+                                    <div class="credit-card-expiry" id="displayExpiryDate">MM/YY</div>
+                                </div>
+                                <div class="credit-card-back">
+                                    <div class="magnetic-strip"></div>
+                                    <div class="cvv-section">
+                                        <label for="cvvDisplay">CVV</label>
+                                        <div id="cvvDisplay">###</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form asp-controller="Home" asp-action="Index" method="post">
+                            <div class="mb-3">
+                                <label for="cardName" class="form-label">Kart Sahibi Adı</label>
+                                <input id="cardName" class="form-control" type="text" name="CardHolderName" asp-for="CardHolderName" placeholder="Kart Sahibi Adı Soyadı" value="" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label">Kart Numarası</label>
+                                <input id="cardNumber" class="form-control" type="text" name="CardNumber" asp-for="CardNumber" value="" placeholder="****-****-****-****-****" maxlength="19" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="expiryDate" class="form-label">Son Kullanma Tarihi</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input id="expiryMonth" class="form-control" type="text" name="ExpiryDateMonth" asp-for="ExpiryDateMonth" value="" placeholder="Ay (MM)" maxlength="2" required />
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="expiryYear" class="form-control" type="text" name="ExpiryDateYear" asp-for="ExpiryDateYear" value="" placeholder="Yıl (YYYY)" maxlength="4" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input id="cvv" class="form-control" type="text" name="Cvv" asp-for="Cvv" value="" required placeholder="***" maxlength="3" />
+                            </div>
+                            <div class="d-grid">
+                                <input type="submit" class="btn btn-success" value="Ödeme Yap" />
+                            </div>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<form action="/" method="post">
-    <table>
-        <tr>
-            <td>Kart Sahibinin Adı Soyadı</td>
-            <td><input type="text" name="CardHolderName" asp-for="CardHolderName" value="" /></td>
-        </tr>
-        <tr>
-            <td>Kredi Kartı Numarası</td>
-            <td><input type="text" name="CardNumber" asp-for="CardNumber" value="" size="20" /></td>
-        </tr>
-        <tr>
-            <td>CVV</td>
-            <td><input type="text" name="Cvv" asp-for="Cvv" value="" /></td>
-        </tr>
-
-        <tr>
-            <td>Son Kullanma Yılı</td>
-            <td><input type="text" name="ExpiryDateYear" asp-for="ExpiryDateYear" value="" /></td>
-        </tr>
-
-        <tr>
-            <td>Son Kullanma Ayı</td>
-            <td><input type="text" name="ExpiryDateMonth" asp-for="ExpiryDateMonth" value="" /> </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="Ödemeyi Tamamla" />
-            </td>
-        </tr>
-    </table>
-</form>
-

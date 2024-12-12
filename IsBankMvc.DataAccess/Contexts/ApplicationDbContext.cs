@@ -13,7 +13,6 @@ namespace IsBankMvc.DataAccess.Contexts
         public DbSet<Customer> Customers { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
         public DbSet<Payment> Payments { get; set; }
-
         public DbSet<Transaction> Transactions { get; set; }
     }
 }

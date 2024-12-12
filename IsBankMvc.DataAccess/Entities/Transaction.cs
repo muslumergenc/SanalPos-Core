@@ -9,23 +9,15 @@ namespace IsBankMvc.DataAccess.Entities
     {
         [Key] public Guid Id { get; set; }
         public Guid PaymentId { get; set; }
-
         public DateTime CreatedAt { get; set; }
         public DateTime? ConfirmedAt { get; set; }
         public DateTime? CanceledAt { get; set; }
-
         public decimal Amount { get; set; }
-
         public Currency Currency { get; set; }
-
         public ThirdPartyProvider Provider { get; set; }
-
         public string RequestPayload { get; set; } = string.Empty;
-        public string? ResponsePayload { get; set; }
-
-        [ForeignKey("PaymentId")] public virtual Payment Payment { get; set; }
-
-
+        public string ResponsePayload { get; set; } = string.Empty;
+        [ForeignKey("PaymentId")] public virtual Payment? Payment { get; set; }
         public TransactionVM ToVM()
         {
             return new TransactionVM

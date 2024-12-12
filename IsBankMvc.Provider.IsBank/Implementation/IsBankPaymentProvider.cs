@@ -9,31 +9,27 @@ using IsBankMvc.Provider.IsBank.Models;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-
-namespace IsBankMvc.Provider.IsBank.Implementation
-{
-    public class IsBankPaymentProvider : IIsBankPaymentProvider
+namespace IsBankMvc.Provider.IsBank.Implementation;
+public class IsBankPaymentProvider : IIsBankPaymentProvider
     {
-
         private readonly string _chargeType;
         private readonly string _clientId;
-        private readonly CultureInfo _culture = new("en-US", false);
-        private readonly Dictionary<string, string> _currencyMap = new();
         private readonly string _failUrl;
-        private readonly IJsonService _jsonService;
-        private readonly ILoggerService _loggerService;
         private readonly string _payUrl;
         private readonly string _storeKey;
         private readonly string _storeType;
         private readonly string _successUrl;
+        private readonly IJsonService _jsonService;
+        private readonly ILoggerService _loggerService;
+        private readonly Dictionary<string, string> _currencyMap = [];
+        private readonly CultureInfo _culture = new("tr-TR", false);
         public IsBankPaymentProvider(ILoggerService loggerService, IJsonService jsonService)
         {
             _loggerService = loggerService;
             _jsonService = jsonService;
-
             _payUrl = "https://istest.asseco-see.com.tr/fim/est3Dgate";
-            _successUrl = "https://localhost:7258/home/success";
-            _failUrl = "https://localhost:7258/home/error";
+            _successUrl = "https://localhost:7258/is-bank/success/:paymentId";
+            _failUrl = "https://localhost:7258/is-bank/fail/:paymentId";
             _storeKey = "TEST3232";
             _storeType = "3D_PAY";
             _clientId = "700657171617";
@@ -56,30 +52,23 @@ namespace IsBankMvc.Provider.IsBank.Implementation
             }
             get => ThirdPartyProvider.IsBank;
         }
-
         public async Task<OperationResult<BankCallbackResponse>> BankCallback(Dictionary<string, string> parameters)
         {
             try
             {
                 await _loggerService.Info("BankCallback started", "IsBankPaymentProvider.BankCallback");
-                var response = new BankCallbackResponse
-                {
+                var response = new BankCallbackResponse{
                     Success = false,
                     Provider = ThirdPartyProvider.IsBank,
                     Parameters = ParseParameters(parameters)
                 };
-
                 var verifiedOp = await VerifyPayment(parameters);
-                if (verifiedOp.Status != OperationResultStatus.Success)
-                {
-                    await _loggerService.Info($"BankCallback rejected: {verifiedOp.Message}",
-                        "IsBankPaymentProvider.BankCallback");
+                if (verifiedOp.Status != OperationResultStatus.Success){
+                    await _loggerService.Info($"BankCallback rejected: {verifiedOp.Message}","IsBankPaymentProvider.BankCallback");
                     return OperationResult<BankCallbackResponse>.Rejected(data: response, message: verifiedOp.Message);
                 }
-
                 response.Parameters = ParseParameters(parameters);
                 response.Success = response.Parameters.Approved;
-
                 var message = $"BankCallback payment approved: {response.Success}";
                 await _loggerService.Info(message, "IsBankPaymentProvider.BankCallback");
                 return OperationResult<BankCallbackResponse>.Success(response);
@@ -90,7 +79,6 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                 return OperationResult<BankCallbackResponse>.Failed();
             }
         }
-
         public async Task<OperationResult<PreparePaymentResponse>> PreparePayment(PreparePaymentRequest request)
         {
             try
@@ -110,17 +98,13 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                     Lang = request.Language,
                     HashAlgorithm = "ver3",
                     Hash = "",
-
                     Pan = request.CardNumber,
-                    CV2 = request.Cvv,
+                    Cvv = request.Cvv,
                     PanExpireYear = request.ExpiryDateYear,
                     PanExpireMonth = request.ExpiryDateMonth,
-
                     Storekey = _storeKey
                 };
-
                 GenerateV3Hash(req);
-
                 var markup = new StringBuilder(TemplateForIsBank.PaymentTemplateV3)
                     .Replace("{gateway}", _payUrl)
                     .Replace("{clientId}", req.ClientId)
@@ -137,12 +121,10 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                     .Replace("{hashAlgorithm}", req.HashAlgorithm)
                     .Replace("{hash}", req.Hash)
                     .Replace("{pan}", req.Pan)
-                    .Replace("{cv2}", req.CV2)
+                    .Replace("{cv2}", req.Cvv)
                     .Replace("{card_exp_year}", req.PanExpireYear)
                     .Replace("{card_exp_month}", req.PanExpireMonth);
-
-                return OperationResult<PreparePaymentResponse>.Success(new PreparePaymentResponse
-                {
+                return OperationResult<PreparePaymentResponse>.Success(new PreparePaymentResponse{
                     Markup = markup.ToString(),
                     Mode = PaymentGatewayMode.Form,
                     Provider = ThirdPartyProvider.IsBank
@@ -154,7 +136,6 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                 return OperationResult<PreparePaymentResponse>.Failed();
             }
         }
-
         public BankCallbackParameters ParseParameters(Dictionary<string, string> parameters)
         {
             try
@@ -190,6 +171,8 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                 string errorMessage;
                 switch (mdStatus)
                 {
+                    case TemplateForIsBank.MdStatusSuccess:
+                        return OperationResult<bool>.Success();
                     case TemplateForIsBank.MdStatus3DSecureSignature:
                         errorMessage = TryGetValue(parameters, errorKey, "MdStatus3DSecureSignature");
                         return OperationResult<bool>.Failed(errorMessage);
@@ -217,9 +200,7 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                     case TemplateForIsBank.MdStatusMerchantNotRegistered:
                         errorMessage = TryGetValue(parameters, errorKey, "MdStatusMerchantNotRegistered");
                         return OperationResult<bool>.Failed(errorMessage);
-                    case TemplateForIsBank.MdStatusSuccess:
-                            return OperationResult<bool>.Success();
-                        break;
+
                 }
 
                 var retrievedHash = TryGetValue(parameters, "HASH");
@@ -259,10 +240,7 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                 return OperationResult<bool>.Failed();
             }
         }
-
-
         #region Private Methods
-
         private string FixText(string input)
         {
             return input
@@ -299,7 +277,7 @@ namespace IsBankMvc.Provider.IsBank.Implementation
             req.CallbackUrl,
             req.ClientId,
             req.Currency,
-            req.CV2,
+            req.Cvv,
             req.PanExpireMonth,
             req.PanExpireYear,
             req.FailUrl,
@@ -313,11 +291,9 @@ namespace IsBankMvc.Provider.IsBank.Implementation
             req.TransactionType,
             req.Storekey
         };
-
             var hashstr = string.Join('|', parts);
             req.Hash = GenerateHash(hashstr);
         }
-
         private string GenerateHash(string pattern)
         {
             byte[] inputbytes;
@@ -326,11 +302,7 @@ namespace IsBankMvc.Provider.IsBank.Implementation
                 var hashbytes = Encoding.UTF8.GetBytes(pattern);
                 inputbytes = sha.ComputeHash(hashbytes);
             }
-
             return Convert.ToBase64String(inputbytes);
         }
-
-
         #endregion
     }
-}
